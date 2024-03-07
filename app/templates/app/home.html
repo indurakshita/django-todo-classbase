@@ -1,0 +1,45 @@
+{% extends 'index/base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-5 text-center">
+  <h2 class="mb-4">App Home</h2>
+</div>
+
+<div class="container col-md-4">
+  <button class="btn btn-primary mb-3" _="on click remove .d-none from #todo-form then add .d-none on me" id="create-new">New todo</button>
+  
+  <form method="post" id="todo-form" class="d-none">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary" _="on click remove .d-none from #create-new then remove .d-none on #todos">Add Todo</button>
+  </form>
+
+  <div class="container-fluid" id="todos">
+    {% for todo in todos %}
+      <div class="card mt-3">
+        <div class="card-header">
+          <h3 class="card-title"> {{ todo.title }}</h3>  
+        </div>
+        
+        <div class="card-body">
+          <p class="card-text"> {{ todo.description }}</p>
+        </div>  
+        
+        <form method="post" action="{% url 'app:complete' pk=todo.id %}" id="delete-form-{{ todo.id }}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+
+        <form method="post" action="{% url 'app:complete' pk=todo.id %}" id="complete-form-{{ todo.id }}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success">Completed</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% endblock %}
